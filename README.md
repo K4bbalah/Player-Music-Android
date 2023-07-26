@@ -1,7 +1,3 @@
 # Player-Music-Android
 
-//Quando for executar a primeira vez //
-/* Colocar as Permissões Manualmente */
-
-
-![Screenshot_20230723_214854_Music Player](https://github.com/K4bbalah/Player-Music-Android/assets/97350510/2d06a10a-a5b3-40e4-b9bb-a359d328919a)
+![Screenshot_20230725_213515_Music player](https://github.com/K4bbalah/Player-Music-Android/assets/97350510/1c8e1ea1-70c3-4db6-ad8e-6549c6ce1fab)
