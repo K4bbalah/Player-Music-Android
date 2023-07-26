@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import java.util.Collections;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +47,11 @@ public class MainActivity extends AppCompatActivity {
 	Runnable runnable;
 	int totalDuration = 0;
 	String durationText ="";
-	ViewSwitcher viewSwitcher;
+	ViewSwitcher viewSwitcher,aleator;
+	Random cpu=new Random();
+	boolean aleaTorio=false;
+	
+	
 	
 	
 	
@@ -96,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
 		}
 		
 		viewSwitcher = findViewById(R.id.viewSwitcher);
+		aleator=findViewById(R.id.aleatorio);
+		
 		
 		
 		
@@ -135,9 +142,34 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 				public void onCompletion(MediaPlayer mp) {
 					// A reprodução da música acabou, inicie a próxima música
+				
+				    //reprodução aleatoria
+					if(aleaTorio==true){
+						
+						
+						
+						int numAle=cpu.nextInt(musicPaths.size());
+						int numAle2=cpu.nextInt(musicPaths.size());
+						if(currentSongIndex != numAle){
+							
+							currentSongIndex=numAle;
+							
+							
+						}else if(currentSongIndex != numAle2){
+							
+							currentSongIndex=numAle2;
+						}
+						else{
+							
+							currentSongIndex=cpu.nextInt(musicPaths.size());
+							
+						}
+						
+					}
 					
+					//reprodução em ordem
 					
-					if(lock2==true) {
+					if(lock2==true && aleaTorio==false) {
 						currentSongIndex++;
 						if(currentSongIndex < musicPaths.size()){
 							
@@ -308,7 +340,6 @@ public void play(View view){
 		totalDuration = mediaPlayer.getDuration();
 		durationText = formatDuration(totalDuration);
 		Durac=findViewById (R.id.duracao);
-		
 		Durac.setText(durationText);
 		lock=true;
 		
@@ -317,7 +348,10 @@ public void play(View view){
 		
 		} else if (view.getId() == R.id.Pause) {
 			viewSwitcher.showPrevious();
+		//	handler.removeCallbacks(runnable);
+			
 			mediaPlayer.pause();
+			
 			lock=false;
 			
 	}
@@ -344,16 +378,6 @@ public void avan(View v){
 		mediaPlayer.seekTo(ava+10000);
 	}
 	
-}
-
-public void pause(View v){
-	if(lock==true){
-		mediaPlayer.pause();
-		handler.removeCallbacks(runnable);
-		
-		lock=false;
-		
-	}
 }
 
 public void next(View  v){
@@ -439,11 +463,26 @@ private void playBackSong(){
 		
 	}
 	
+}	
+
+
+public void ale(View view){
+		
+		if (view.getId() == R.id.alea) {
+			aleator.showNext();
+			aleaTorio=true;
+			
+			
+			
+			} else if (view.getId() == R.id.ordem) {
+			aleator.showPrevious();
+			aleaTorio=false;
+			
+			
+		}
+}	
 	
-	
-	
-	
-}
+
 
 
 
