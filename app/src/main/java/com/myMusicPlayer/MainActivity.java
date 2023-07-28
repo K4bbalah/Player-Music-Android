@@ -1,23 +1,18 @@
 package com.myMusicPlayer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.Manifest;
-import android.animation.AnimatorSet;
 import android.media.MediaPlayer;
-import android.app.Activity;
 import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import android.view.View;
 import android.os.Handler;
 import android.widget.Toast;
-import android.view.Gravity;
 import android.os.Environment;
 import android.widget.SeekBar;
 import java.util.concurrent.TimeUnit;
