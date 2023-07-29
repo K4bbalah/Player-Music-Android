@@ -57,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
 	ObjectAnimator animator= new ObjectAnimator();
 	Runnable runnable;
 	int totalDuration = 0;
-	String durationText ="";
+	String durationText;
 	ViewSwitcher viewSwitcher,aleator;
 	Random cpu=new Random();
 	boolean aleaTorio=false;
 	String textIn;
-	String textIn2="Play";
+	String textIn2;
 	int incializador=0;
 	
 	
@@ -405,7 +405,7 @@ public void play(View view){
 		Durac=findViewById (R.id.duracao);
 		Durac.setText(durationText);
 		lock=true;
-		textIn="Reproduzindo.";
+		textIn="Reproduzindo";
 		showNotification(textIn, TextoOriginal.substring(26) );
 		
 		
@@ -470,9 +470,9 @@ public void back(View v) {
 private  void playNextSong() {
 	
 	if(lock==true){
-		textIn="Reproduzindo.";}else{
+		textIn="Reproduzindo";}else{
 		
-		textIn="Inicio.";
+		textIn="Inicio";
 		
 		}
 	lock2=true;
@@ -510,9 +510,9 @@ private void playBackSong(){
 	if(currentSongIndex >=0){
 		
 		if(lock==true){
-			textIn="Reproduzindo.";}else{
+			textIn="Reproduzindo";}else{
 				
-				textIn="Inicio.";
+				textIn="Inicio";
 				
 			}
 		
