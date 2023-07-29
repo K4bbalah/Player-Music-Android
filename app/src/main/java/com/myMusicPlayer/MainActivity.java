@@ -32,6 +32,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import android.app.PendingIntent;
+import  android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.widget.Button;
+
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -55,11 +62,46 @@ public class MainActivity extends AppCompatActivity {
 	Random cpu=new Random();
 	boolean aleaTorio=false;
 	String textIn;
+	String textIn2="Play";
+	int incializador=0;
 	
 	
-	private static final String CHANNEL_ID = "my_channel_id";
-	private static final int NOTIFICATION_ID = 1;
+	 String CHANNEL_ID = "my_channel_id";
+	 int NOTIFICATION_ID = 1;
+	String ACTION_BUTTON_1 = "action_button_1";
+	String ACTION_BUTTON_2 = "action_button_2";
+	String ACTION_BUTTON_3 = "action_button_3";
 	
+	private BroadcastReceiver buttonActionReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent != null) {
+				String action = intent.getAction();
+				if (ACTION_BUTTON_1.equals(action)) {
+					
+					
+					View myView = findViewById(R.id.back);
+					back(myView);
+					
+					
+					
+					} else if (ACTION_BUTTON_2.equals(action)) {
+					// Lidar com a ação do botão 2
+					View myView = findViewById(R.id.Play);
+					play(myView);
+					
+					
+					
+				}else if (ACTION_BUTTON_3.equals(action)) {
+				// Lidar com a ação do botão 3
+     
+				 View myView = findViewById(R.id.Next);
+				 next(myView);
+				
+				
+			}}
+		}
+	};
 	
 	
 	
@@ -70,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 		// Inicializa o MediaPlayer
 		mediaPlayer = new MediaPlayer();
+		
+		// Registrar o BroadcastReceiver para receber as ações dos botões
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ACTION_BUTTON_1);
+		filter.addAction(ACTION_BUTTON_2);
+		filter.addAction(ACTION_BUTTON_3);
+		registerReceiver(buttonActionReceiver, filter);
+		
 	
 	// Verifica se a permissão já foi concedida
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -101,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
 		  TextoOriginal =musicPaths.get(currentSongIndex );
 		  TextView t1=findViewById (R.id.musicas);
 		  t1.setText(TextoOriginal.substring(26));
+		  
+		  
 		  
 		  
 
@@ -345,7 +397,7 @@ public  String formatDuration(int duration) {
 
 public void play(View view){
 	
-	if (view.getId() == R.id.Play) {
+	if (lock==false) {
 		viewSwitcher.showNext();
 		mediaPlayer.start();
 		totalDuration = mediaPlayer.getDuration();
@@ -353,18 +405,18 @@ public void play(View view){
 		Durac=findViewById (R.id.duracao);
 		Durac.setText(durationText);
 		lock=true;
-		textIn="Reproduzindo!";
+		textIn="Reproduzindo.";
 		showNotification(textIn, TextoOriginal.substring(26) );
 		
 		
-		} else if (view.getId() == R.id.Pause) {
+		} else   {
 			viewSwitcher.showPrevious();
 		//	handler.removeCallbacks(runnable);
 			
 			mediaPlayer.pause();
 			
 			lock=false;
-			textIn="Pausado!";
+			textIn="Pausado";
 			showNotification(textIn, TextoOriginal.substring(26) );
 			
 	}
@@ -418,9 +470,9 @@ public void back(View v) {
 private  void playNextSong() {
 	
 	if(lock==true){
-		textIn="Reproduzindo!";}else{
+		textIn="Reproduzindo.";}else{
 		
-		textIn="Pausado!";
+		textIn="Inicio.";
 		
 		}
 	lock2=true;
@@ -458,9 +510,9 @@ private void playBackSong(){
 	if(currentSongIndex >=0){
 		
 		if(lock==true){
-			textIn="Reproduzindo!";}else{
+			textIn="Reproduzindo.";}else{
 				
-				textIn="Pausado!";
+				textIn="Inicio.";
 				
 			}
 		
@@ -521,11 +573,34 @@ public void ale(View view){
 private void showNotification(String title, String content) {
 	createNotificationChannel();
 	
+	if(lock==true){
+		textIn2="Pause";
+	}else{
+		textIn2="Play";
+	}
+	// Ação 1
+	Intent intentButton1 = new Intent(ACTION_BUTTON_1);
+	PendingIntent pendingIntentButton1 = PendingIntent.getBroadcast(this, 0, intentButton1, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+	// Ação 2
+	Intent intentButton2 = new Intent(ACTION_BUTTON_2);
+	PendingIntent pendingIntentButton2 = PendingIntent.getBroadcast(this, 0, intentButton2, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+	
+	// Ação 2l3
+	Intent intentButton3 = new Intent(ACTION_BUTTON_3);
+	PendingIntent pendingIntentButton3 = PendingIntent.getBroadcast(this, 0, intentButton3, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+	
 	NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
 	.setSmallIcon(R.drawable.no_icon)
 	.setContentTitle(title)
 	.setContentText(content)
-	.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+	.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+	.setStyle(new NotificationCompat.BigTextStyle().bigText(content))
+	.addAction(R.drawable.bu_back, "Back", pendingIntentButton1)
+	.addAction(R.drawable.bu_play, textIn2, pendingIntentButton2)
+	.addAction(R.drawable.bu_next , "Next", pendingIntentButton3);
 	
 	
 	NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -549,8 +624,8 @@ private void createNotificationChannel() {
 }
 
 			
-			
-			
+		
+		
 			
 		
 
