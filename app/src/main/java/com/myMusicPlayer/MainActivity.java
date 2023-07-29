@@ -23,6 +23,15 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import java.util.Collections;
 import java.util.Random;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,8 +54,11 @@ public class MainActivity extends AppCompatActivity {
 	ViewSwitcher viewSwitcher,aleator;
 	Random cpu=new Random();
 	boolean aleaTorio=false;
+	String textIn;
 	
 	
+	private static final String CHANNEL_ID = "my_channel_id";
+	private static final int NOTIFICATION_ID = 1;
 	
 	
 	
@@ -86,9 +98,15 @@ public class MainActivity extends AppCompatActivity {
 	       //Musicas em ordem alfabeticas
 		   
 		  Collections.sort(musicPaths);
+		  TextoOriginal =musicPaths.get(currentSongIndex );
+		  TextView t1=findViewById (R.id.musicas);
+		  t1.setText(TextoOriginal.substring(26));
+		  
+		  
 
-		
-		
+		// Exemplo de como chamar o método para mostrar a notificação
+	//	showNotification("Título da Notificação", TextoOriginal.substring(26) );
+	
 		
 		
 		  
@@ -179,9 +197,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 			});
 			
-			TextoOriginal =musicPaths.get(currentSongIndex );
-			TextView t1=findViewById (R.id.musicas);
-			 t1.setText(TextoOriginal.substring(26));
+		
 			
 			
 			
@@ -337,8 +353,8 @@ public void play(View view){
 		Durac=findViewById (R.id.duracao);
 		Durac.setText(durationText);
 		lock=true;
-		
-		
+		textIn="Reproduzindo!";
+		showNotification(textIn, TextoOriginal.substring(26) );
 		
 		
 		} else if (view.getId() == R.id.Pause) {
@@ -348,6 +364,8 @@ public void play(View view){
 			mediaPlayer.pause();
 			
 			lock=false;
+			textIn="Pausado!";
+			showNotification(textIn, TextoOriginal.substring(26) );
 			
 	}
 }
@@ -398,10 +416,20 @@ public void back(View v) {
 
 
 private  void playNextSong() {
+	
+	if(lock==true){
+		textIn="Reproduzindo!";}else{
+		
+		textIn="Pausado!";
+		
+		}
 	lock2=true;
 	TextoOriginal =musicPaths.get(currentSongIndex );
 	TextView t1=findViewById (R.id.musicas);             
 	t1.setText(TextoOriginal.substring(26));
+	
+	//Exemplo de como chamar o método para mostrar a notificação
+	showNotification(textIn, TextoOriginal.substring(26) );
 	
 	
 	
@@ -429,9 +457,19 @@ private void playBackSong(){
 	
 	if(currentSongIndex >=0){
 		
+		if(lock==true){
+			textIn="Reproduzindo!";}else{
+				
+				textIn="Pausado!";
+				
+			}
+		
 		TextoOriginal =musicPaths.get(currentSongIndex );
 		TextView t1=findViewById (R.id.musicas);  
 		t1.setText(TextoOriginal.substring(26));
+		
+		//Exemplo de como chamar o método para mostrar a notificação
+		showNotification(textIn, TextoOriginal.substring(26) );
 		
 		
 		
@@ -478,10 +516,37 @@ public void ale(View view){
 }	
 	
 
+//Cria as notificaçoes
 
+private void showNotification(String title, String content) {
+	createNotificationChannel();
+	
+	NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+	.setSmallIcon(R.drawable.no_icon)
+	.setContentTitle(title)
+	.setContentText(content)
+	.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+	
+	
+	NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+	notificationManager.notify(NOTIFICATION_ID, builder.build());
+}
 
-
-
+private void createNotificationChannel() {
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+		CharSequence name = "My Channel";
+		String description = "My Notification Channel";
+		int importance = NotificationManager.IMPORTANCE_DEFAULT;
+		
+		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+		channel.setDescription(description);
+		channel.setSound(null, null);
+		
+		
+		NotificationManager notificationManager = getSystemService(NotificationManager.class);
+		notificationManager.createNotificationChannel(channel);
+	}
+}
 
 			
 			
