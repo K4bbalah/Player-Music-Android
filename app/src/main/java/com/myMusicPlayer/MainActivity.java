@@ -600,7 +600,8 @@ private void showNotification(String title, String content) {
 	.setStyle(new NotificationCompat.BigTextStyle().bigText(content))
 	.addAction(R.drawable.bu_back, "Back", pendingIntentButton1)
 	.addAction(R.drawable.bu_play, textIn2, pendingIntentButton2)
-	.addAction(R.drawable.bu_next , "Next", pendingIntentButton3);
+	.addAction(R.drawable.bu_next , "Next", pendingIntentButton3)
+	.setOngoing(true);
 	
 	
 	NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -632,6 +633,7 @@ private void createNotificationChannel() {
 @Override
 protected void onDestroy() {
 	super.onDestroy();
+	removeNotification();
 	// Libera recursos do MediaPlayer quando o aplicativo for encerrado
 	if (mediaPlayer != null) {
 		mediaPlayer.release();
@@ -640,4 +642,11 @@ protected void onDestroy() {
 	}
 }
 
+private void removeNotification() {
+	// Remove o serviço da frente da notificação
+	NotificationManager notificationManager = getSystemService(NotificationManager.class);
+	notificationManager.cancel(NOTIFICATION_ID);
+}
+
+	
 }
