@@ -598,10 +598,10 @@ private void showNotification(String title, String content) {
 	.setContentText(content)
 	.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 	.setStyle(new NotificationCompat.BigTextStyle().bigText(content))
-	.addAction(R.drawable.bu_back, "Back", pendingIntentButton1)
-	.addAction(R.drawable.bu_play, textIn2, pendingIntentButton2)
-	.addAction(R.drawable.bu_next , "Next", pendingIntentButton3)
-	.setOngoing(true);
+	.addAction(0, "Back", pendingIntentButton1)
+	.addAction(0, textIn2, pendingIntentButton2)
+	.addAction(0, "Next", pendingIntentButton3);
+	
 	
 	
 	NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
