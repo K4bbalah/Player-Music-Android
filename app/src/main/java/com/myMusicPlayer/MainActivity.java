@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 						playNextSong();}
 						
 						else{
-							currentSongIndex--;
+							currentSongIndex=0;
 						playNextSong();}
 						
 					} playNextSong();
@@ -450,7 +450,7 @@ public void next(View  v){
 	if(currentSongIndex < musicPaths.size()){
 		playNextSong();}
 		else{
-			 currentSongIndex--;
+			 currentSongIndex=0;
 			 playNextSong();}
 	}
 
@@ -459,7 +459,7 @@ public void back(View v) {
 	if(currentSongIndex>=0){
 		playBackSong ();
 		}else{
-			currentSongIndex++;
+			currentSongIndex=musicPaths.size()-1;
 			playBackSong();
 	}
 	
